@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class Provider
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string UserId { get; set; }
     public string Skills { get; set; }
     public double Rating { get; set; }

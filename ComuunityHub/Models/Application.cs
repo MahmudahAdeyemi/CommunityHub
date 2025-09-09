@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class Application
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string JobId { get; set; }
     public string JobSeekerId { get; set; }
     public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;

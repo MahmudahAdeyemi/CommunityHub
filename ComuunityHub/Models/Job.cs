@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class Job
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string CommunityId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }

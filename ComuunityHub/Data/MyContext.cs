@@ -24,4 +24,6 @@ public class MyContext : DbContext
     public DbSet<Provider> ServiceProviders { get; set; }
     public DbSet<Service> Services { get; set; }
     public DbSet<Booking> Bookings { get; set; }
+    public DbSet<EmailOTP> EmailOTPs { get; set; }
+
 }

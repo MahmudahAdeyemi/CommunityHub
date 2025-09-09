@@ -1,6 +1,6 @@
 namespace ComuunityHub.Models;
 
-public enum Roles
+public enum Role
 {
     User,
     Seller,

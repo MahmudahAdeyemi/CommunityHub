@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class JobSeeker
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string UserId { get; set; }
     public string CVLink { get; set; }
     public User User { get; set; }

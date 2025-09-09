@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class Booking
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string ServiceId { get; set; }
     public string ClientId { get; set; }
     public BookingStatus Status { get; set; } =  BookingStatus.Pending;

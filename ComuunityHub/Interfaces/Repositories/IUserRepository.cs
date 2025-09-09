@@ -9,4 +9,5 @@ public interface IUserRepository
     Task AddUser(User user);
     Task UpdateUser(User user);
     Task RemoveUser(User user);
+    Task<User> GetUserByUsernameAsync(string username);
 }

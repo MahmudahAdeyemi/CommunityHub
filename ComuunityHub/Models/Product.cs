@@ -2,7 +2,7 @@ namespace ComuunityHub.Models;
 
 public class Product
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string CommunityId { get; set; }
     public string SellerId { get; set; }
     public string Name { get; set; }

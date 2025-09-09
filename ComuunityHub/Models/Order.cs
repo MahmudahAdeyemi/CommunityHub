@@ -2,8 +2,9 @@ namespace ComuunityHub.Models;
 
 public class Order
 {
-    public string OrderId { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public string BuyerId { get; set; }
+    public string PaymentId { get; set; }
     public string ProductId { get; set; }
     public int Quantity { get; set; }
     public OrderStatus Status { get; set; }
