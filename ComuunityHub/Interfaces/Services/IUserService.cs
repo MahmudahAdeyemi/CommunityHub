@@ -6,7 +6,7 @@ namespace ComuunityHub.Interfaces.Services;
 
 public interface IUserService
 {
-    Task<BaseResponse> Login(LoginRequestModel model);
+    Task<LoginUserResponseModel> Login(LoginRequestModel model);
     Task<string> GenerateJwtToken(User user);
     Task<RegisterUserResponseModel> RegisterUser(RegisterUserRequestModel model);
 }

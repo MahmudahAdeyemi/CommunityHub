@@ -27,7 +27,7 @@ public class AccountController : ControllerBase
         return BadRequest(new { Message = response.Message });
     }
     [HttpPost("verify-otp")]
-    public async Task<IActionResult> VerifyOtp(VerifyOtpRequestModel request)
+    public async Task<IActionResult> VerifyOtp([FromBody]VerifyOtpRequestModel request)
     {
         var response = await _emailOTPService.VerifyOTP(request);
 
@@ -42,8 +42,8 @@ public class AccountController : ControllerBase
         var response = await _userService.Login(model);
         if (response.Status)
         {
-            return Ok(new { Message = "Login successful." });
+            return Ok(new {isEmailConfirmed=response.isEmailConfirmed, Message = "Login successful." });
         }
-        return BadRequest(new { Message = response.Message });
+        return BadRequest(new { Message = response.Message , Token  = response.Token });
     }
 }

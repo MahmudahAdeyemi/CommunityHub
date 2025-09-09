@@ -29,13 +29,14 @@ public class UserService : IUserService
 
     }
 
-    public async Task<BaseResponse> Login(LoginRequestModel model)
+    public async Task<LoginUserResponseModel> Login(LoginRequestModel model)
     {
         var user =await _userRepository.GetUserByEmailAsync(model.Email);
         if (user == null)
         {
-            return new BaseResponse
+            return new LoginUserResponseModel
             {
+                isEmailConfirmed = true,
                 Message = "You need to register",
                 Status = false
             };
@@ -43,22 +44,28 @@ public class UserService : IUserService
 
         if (!user.IsEmailConfirmed)
         {
-            return new BaseResponse
+            return new LoginUserResponseModel
             {
+                isEmailConfirmed = false,
                 Message = "You need to verify your email before doing anything",
                 Status = false
             };
         }
         if (user.Password != HashPassword(model.Password))
         {
-            return new BaseResponse
+            return new LoginUserResponseModel
             { 
+                isEmailConfirmed = true,
                 Message = "Invalid email or password",
                 Status = false
             };
         }
-        return new BaseResponse
+
+        var token = await GenerateJwtToken(user);
+        return new LoginUserResponseModel
         {
+            Token=token,
+            isEmailConfirmed = true,
             Message = "Login successful",
             Status = true
         };
