@@ -214,5 +214,38 @@ public class CommunityMemberService : ICommunityMemberService
             Message = "Member removed successfully."
         };
     }
+
+    public async Task<GetAllCommunityResponseModel> GetMyCommunities()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var communities = await _communityRepository.GetUserCommunity(userId);
+        var result = communities.Select(c => new GetCommunityDTO()
+        {
+            Name = c.Name,
+            Description = c.Description
+        }).ToList();
+        return new GetAllCommunityResponseModel()
+        {
+            Data = result,
+            Status = true,
+            Message = "Successfully retrieved all the communities that you have joined."
+        };
+    }
+
+    public async Task<GetAllMembersResponseModel> GetPendingMembers(string communityId)
+    {
+        var pendingMembers = await _communityMemberRepository.GetPendingMembers(communityId);
+        var result = pendingMembers.Select(m => new MemberDTO()
+        {
+            Username = m.User.Username,
+            Email = m.User.Email,
+        }).ToList();
+        return new GetAllMembersResponseModel()
+        {
+            Data = result,
+            Status = true,
+            Message = "Successfully retrieved pending members."
+        };
+    }
     
 }

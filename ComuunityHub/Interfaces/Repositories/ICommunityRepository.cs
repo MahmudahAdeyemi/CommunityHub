@@ -10,4 +10,6 @@ public interface ICommunityRepository
     Task<IEnumerable<Community>> GetUserCommunity(string userId);
     Task<Community?> GetCommunityByName(string name);
     Task UpdateCommunity(Community community);
+    Task DeleteCommunity(Community community);
+    Task<List<Community>> GetCommunityByCreator(string userId);
 }

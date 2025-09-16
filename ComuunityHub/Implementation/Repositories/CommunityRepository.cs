@@ -50,4 +50,16 @@ public class CommunityRepository : ICommunityRepository
         _context.Communities.Update(community);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteCommunity(Community community)
+    {
+        _context.Communities.Remove(community);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Community>> GetCommunityByCreator(string userId)
+    {
+        return await _context.Communities.Where(x => x.CreatedBy.Id == userId).ToListAsync();
+    }
+
 }

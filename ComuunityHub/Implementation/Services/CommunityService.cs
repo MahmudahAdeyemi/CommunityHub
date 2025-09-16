@@ -16,15 +16,17 @@ public class CommunityService : ICommunityService
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IElasticService _elasticService;
 
     public CommunityService(ICommunityRepository communityRepository, IUserRepository userRepository,
-        IEmailService emailService, IHttpContextAccessor httpContextAccessor,ICommunityMemberRepository communityMemberRepository)
+        IEmailService emailService, IHttpContextAccessor httpContextAccessor,ICommunityMemberRepository communityMemberRepository,IElasticService elasticService)
     {
         _communityRepository = communityRepository;
         _userRepository = userRepository;
         _emailService = emailService;
         _httpContextAccessor = httpContextAccessor;
         _communityMemberRepository = communityMemberRepository;
+        _elasticService = elasticService;
     }
 
     public async Task<BaseResponse> CreateCommunity(CreateCommunityRequestModel model)
@@ -48,6 +50,8 @@ public class CommunityService : ICommunityService
             CreatedBy = user,
             Status = CommunityStatus.Pending
         };
+        await _elasticService.IndexAsync(community, "communities");
+
         await _communityRepository.CreateCommunity(community);
         string subject = "Your Community Has Been Created – Pending Approval";
         string body =
@@ -246,4 +250,75 @@ public class CommunityService : ICommunityService
             Message = "Community updated successfully."
         };
     }
+    public async Task<BaseResponse> DeleteCommunityAsync(string communityId)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var community = await _communityRepository.GetByIdAsync(communityId);
+        if (community == null)
+        {
+            return new BaseResponse
+            {
+                Status = false,
+                Message = "Community not found."
+            };
+        }
+
+        
+        if (community.CreatedBy.Id != userId)
+        {
+            return new BaseResponse
+            {
+                Status = false,
+                Message = "You are not authorized to delete this community."
+            };
+        }
+
+        await _communityRepository.DeleteCommunity(community);
+
+        return new BaseResponse
+        {
+            Status = true,
+            Message = "Community deleted successfully."
+        };
+    }
+
+    public async Task<GetAllCommunityResponseModel> GetCreatedCommunities()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var communities = await _communityRepository.GetCommunityByCreator(userId);
+        var result = communities.Select(c => new GetCommunityDTO()
+        {
+            Name = c.Name,
+            Description = c.Description,
+            Status = c.Status.ToString()
+        }).ToList();
+        return new GetAllCommunityResponseModel
+        {
+            Data = result,
+            Status = true,
+            Message = "Successfully returned created communities."
+        };
+    }
+
+    public async Task<GetAllCommunityResponseModel> SearchCommunitiesAsync(string keyword)
+    {
+        var results = await _elasticService.SearchAsync<Community>(
+            keyword,
+            "communities",
+            "name^2", "description"
+        );
+        var result = results.Select(c => new GetCommunityDTO()
+        {
+            Name = c.Name,
+            Description = c.Description,
+            Status = c.Status.ToString()
+        }).ToList();
+        return new GetAllCommunityResponseModel
+        {
+            Status = result.Any(),
+            Message = result.Any() ? "Communities found." : "No matches.",
+            Data = result
+        };
+    }
+
 }

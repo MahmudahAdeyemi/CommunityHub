@@ -1,7 +1,7 @@
 using ComuunityHub.RequestModels;
 using ComuunityHub.ResponseModels;
 
-namespace ComuunityHub.Implementation.Services;
+namespace ComuunityHub.Interfaces.Services;
 
 public interface ICommunityService
 {
@@ -13,4 +13,7 @@ public interface ICommunityService
     Task<BaseResponse> ApproveCommunity(string communityId);
     Task<BaseResponse> RejectCommunity(string communityId);
     Task<BaseResponse> UpdateCommunity(string communityId, UpdateCommunityRequestModel model);
+    Task<BaseResponse> DeleteCommunityAsync(string communityId);
+    Task<GetAllCommunityResponseModel> GetCreatedCommunities();
+    Task<GetAllCommunityResponseModel> SearchCommunitiesAsync(string keyword);
 }

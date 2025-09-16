@@ -1,13 +1,14 @@
+using ComuunityHub.Implementation.Services;
 using ComuunityHub.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComuunityHub.Controllers;
 
-public class CommunityMemberController1cs : ControllerBase
+public class CommunityMemberController : ControllerBase
 {
     private readonly ICommunityMemberService _communityMemberService;
 
-    public CommunityMemberController1cs(ICommunityMemberService communityMemberService)
+    public CommunityMemberController(ICommunityMemberService communityMemberService)
     {
         _communityMemberService = communityMemberService;
     }
@@ -70,5 +71,15 @@ public class CommunityMemberController1cs : ControllerBase
             return Ok(response);
 
         return BadRequest(response);
+    }
+    [HttpGet("{communityId}/pending-members")]
+    public async Task<IActionResult> GetPendingMembers(string communityId)
+    {
+        var response = await _communityMemberService.GetPendingMembers(communityId);
+
+        if (response.Status)
+            return Ok(response);
+
+        return NotFound(response);
     }
 }
