@@ -7,5 +7,6 @@ public class Community
     public User CreatedBy { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; }
+    public CommunityStatus Status { get; set; }
     public List<CommunityMember> Members { get; set; } = [];
 }

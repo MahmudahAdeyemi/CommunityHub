@@ -8,5 +8,7 @@ public class CommunityMember
     public string CommunityId { get; set; }
     public Community Community { get; set; }
     public List<Role> Role { get; set; } = [];
+    public CommunityStatus Status { get; set; }
+    public CommunityRole CommunityRole { get; set; }
     public DateTime JoinedAt { get; set; } =  DateTime.Now;
 }
