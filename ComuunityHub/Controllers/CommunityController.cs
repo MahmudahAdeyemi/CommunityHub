@@ -4,8 +4,9 @@ using ComuunityHub.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComuunityHub.Controllers;
-
-public class CommunityController : ControllerBase
+[ApiController]
+[Route("api/[controller]")]
+public class CommunityController : Controller
 {
     private readonly ICommunityMemberService _communityMemberService;
     private readonly ICommunityService _communityService;
@@ -85,5 +86,45 @@ public class CommunityController : ControllerBase
             return Ok(response);
 
         return BadRequest(response);
+    }
+    [HttpDelete("{communityId}")]
+    public async Task<IActionResult> DeleteCommunity(string communityId)
+    {
+        var response = await _communityService.DeleteCommunityAsync(communityId);
+
+        if (response.Status)
+            return Ok(response);
+
+        return BadRequest(response);
+    }
+    [HttpGet("my")]
+    public async Task<IActionResult> GetMyCommunities()
+    {
+        var response = await _communityService.GetUserCommunities();
+
+        if (response.Status)
+            return Ok(response);
+
+        return NotFound(response);
+    }
+    [HttpGet("created")]
+    public async Task<IActionResult> GetCreatedCommunities()
+    {
+        var response = await _communityService.GetCreatedCommunities();
+
+        if (response.Status)
+            return Ok(response);
+
+        return NotFound(response);
+    }
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchCommunities([FromQuery] string keyword)
+    {
+        var response = await _communityService.SearchCommunitiesAsync(keyword);
+
+        if (response.Status)
+            return Ok(response);
+
+        return NotFound(response);
     }
 }

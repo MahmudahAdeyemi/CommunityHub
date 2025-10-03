@@ -5,6 +5,7 @@ using ComuunityHub.Implementation.Services;
 using ComuunityHub.Interfaces.Repositories;
 using ComuunityHub.Interfaces.Services;
 using ComuunityHub.Models;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,8 +24,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailOTPService, EmailOTPService>();
 builder.Services.AddScoped<IEmailOtpRepository, EmailOtpRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IElasticService, ElasticService>();
 
 
+builder.Services.Configure<FezDelivery>(
+    builder.Configuration.GetSection("FezDelivery"));
+
+// builder.Services.AddHttpClient<IFezShipmentService, FezShipmentService>();
+
+builder.Services.Configure<PaystackSettings>(
+    builder.Configuration.GetSection("Paystack"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -54,6 +63,17 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+});
+builder.Services.AddSingleton(provider =>
+{
+    var config = builder.Configuration.GetSection("Elasticsearch");
+    var uri = config["Uri"];
+    var defaultIndex = config["DefaultIndex"];
+
+    var settings = new ElasticsearchClientSettings(new Uri(uri))
+        .DefaultIndex(defaultIndex);
+
+    return new ElasticsearchClient(settings);
 });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

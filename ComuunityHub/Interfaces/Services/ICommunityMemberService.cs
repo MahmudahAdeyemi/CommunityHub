@@ -10,4 +10,5 @@ public interface ICommunityMemberService
     Task<BaseResponse> ApproveMember(string communityId, string userId);
     Task<BaseResponse> RejectMember(string communityId, string userId);
     Task<BaseResponse> RemoveMemberAsync(string communityId, string userId);
+    Task<GetAllMembersResponseModel> GetPendingMembers(string communityId);
 }

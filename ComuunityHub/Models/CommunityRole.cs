@@ -3,5 +3,9 @@ namespace ComuunityHub.Models;
 public enum CommunityRole
 {
     Creator,
-    Member
+    Member,
+    Seller,
+    Buyer,
+    Employer,
+    JobSeeker
 }

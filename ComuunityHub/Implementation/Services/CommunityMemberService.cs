@@ -55,9 +55,14 @@ public class CommunityMemberService : ICommunityMemberService
             CommunityId = community.Id,
             Status = CommunityStatus.Pending,
             UserId = userId,
-            Role = user.Roles,
-            CommunityRole = CommunityRole.Member
+            Role = user.Role
         };
+        CommunityMemberRole communityMemberRole = new CommunityMemberRole()
+        {
+            CommunityMemberId = member.Id,
+            Role = CommunityRole.Member
+        };
+        member.CommunityRole.Add(communityMemberRole);
         await _communityMemberRepository.AddCommunityMember(member);
         string subject = $"Your Request to Join {community.Name} is Pending Approval";
         string body =
@@ -212,6 +217,39 @@ public class CommunityMemberService : ICommunityMemberService
         {
             Status = true,
             Message = "Member removed successfully."
+        };
+    }
+
+    public async Task<GetAllCommunityResponseModel> GetMyCommunities()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var communities = await _communityRepository.GetUserCommunity(userId);
+        var result = communities.Select(c => new GetCommunityDTO()
+        {
+            Name = c.Name,
+            Description = c.Description
+        }).ToList();
+        return new GetAllCommunityResponseModel()
+        {
+            Data = result,
+            Status = true,
+            Message = "Successfully retrieved all the communities that you have joined."
+        };
+    }
+
+    public async Task<GetAllMembersResponseModel> GetPendingMembers(string communityId)
+    {
+        var pendingMembers = await _communityMemberRepository.GetPendingMembers(communityId);
+        var result = pendingMembers.Select(m => new MemberDTO()
+        {
+            Username = m.User.Username,
+            Email = m.User.Email,
+        }).ToList();
+        return new GetAllMembersResponseModel()
+        {
+            Data = result,
+            Status = true,
+            Message = "Successfully retrieved pending members."
         };
     }
     

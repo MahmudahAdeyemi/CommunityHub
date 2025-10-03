@@ -15,8 +15,11 @@ public class MyContext : DbContext
     public DbSet<Seller> Sellers { get; set; }
     public DbSet<Buyer> Buyers { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<Payment> Payments { get; set; }
+    public DbSet<SubOrder>  SubOrders { get; set; }
+    public DbSet<SubOrderItem> SubOrderItems { get; set; }
     public DbSet<Employer> Employers { get; set; }
     public DbSet<JobSeeker> JobSeekers { get; set; }
     public DbSet<Job> Jobs { get; set; }
@@ -25,5 +28,6 @@ public class MyContext : DbContext
     public DbSet<Service> Services { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<EmailOTP> EmailOTPs { get; set; }
+    public DbSet<Cart>  Carts { get; set; }
 
 }

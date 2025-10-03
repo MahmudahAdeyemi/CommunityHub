@@ -23,11 +23,7 @@ public class CommunityMemberRepository : ICommunityMemberRepository
         await _context.CommunityMembers.AddAsync(communityMember);
         await _context.SaveChangesAsync();
     }
-    public async Task<CommunityMember?> GetMemberByIdAsync(string communityId, string userId)
-    {
-        return await _context.CommunityMembers
-            .FirstOrDefaultAsync(cm => cm.CommunityId == communityId && cm.UserId == userId);
-    }
+   
     public async Task RemoveMemberAsync(CommunityMember member)
     {
         _context.CommunityMembers.Remove(member);
@@ -38,6 +34,11 @@ public class CommunityMemberRepository : ICommunityMemberRepository
     {
         _context.CommunityMembers.Update(member);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<CommunityMember>> GetPendingMembers(string communityId)
+    {
+        return await _context.CommunityMembers.Where(cm => cm.CommunityId == communityId  && cm.Status == CommunityStatus.Pending).ToListAsync();
     }
     
 }
