@@ -55,9 +55,14 @@ public class CommunityMemberService : ICommunityMemberService
             CommunityId = community.Id,
             Status = CommunityStatus.Pending,
             UserId = userId,
-            Role = user.Roles,
-            CommunityRole = CommunityRole.Member
+            Role = user.Role
         };
+        CommunityMemberRole communityMemberRole = new CommunityMemberRole()
+        {
+            CommunityMemberId = member.Id,
+            Role = CommunityRole.Member
+        };
+        member.CommunityRole.Add(communityMemberRole);
         await _communityMemberRepository.AddCommunityMember(member);
         string subject = $"Your Request to Join {community.Name} is Pending Approval";
         string body =

@@ -27,6 +27,13 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IElasticService, ElasticService>();
 
 
+builder.Services.Configure<FezDelivery>(
+    builder.Configuration.GetSection("FezDelivery"));
+
+// builder.Services.AddHttpClient<IFezShipmentService, FezShipmentService>();
+
+builder.Services.Configure<PaystackSettings>(
+    builder.Configuration.GetSection("Paystack"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

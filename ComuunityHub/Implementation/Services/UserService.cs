@@ -77,12 +77,9 @@ public class UserService : IUserService
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email)
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role.ToString())
         };
-        foreach (var role in user.Roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
-        }
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -124,7 +121,8 @@ public class UserService : IUserService
             FirstName = model.FirstName,
             LastName = model.LastName,
             Username = model.Username,
-            IsEmailConfirmed = false
+            IsEmailConfirmed = false,
+            Role = Role.User
         };
         await _userRepository.AddUser(user);
         await _emailOTPService.SendandGenerateOTP(user.Id);

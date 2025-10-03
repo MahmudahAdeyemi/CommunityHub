@@ -9,7 +9,12 @@ public class Product
     public string Description { get; set; }
     public decimal Price { get; set; }
     public decimal Stock { get; set; }
+    public string ImageUrl { get; set; }
+    public string CategoryId { get; set; }
+    public Category Category { get; set; }
+    public string Tags { get; set; }
+    public ProductStatus Status { get; set; }
     public Community Community { get; set; }
     public Seller Seller { get; set; }
-    public ICollection<Order> Orders { get; set; }
+    public ICollection<Order> Orders { get; set; } = [];
 }

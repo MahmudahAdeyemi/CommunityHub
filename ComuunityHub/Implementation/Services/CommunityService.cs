@@ -131,10 +131,15 @@ public class CommunityService : ICommunityService
             User = community.CreatedBy,
             Status = CommunityStatus.Approved,
             CommunityId = community.Id,
-            Role = community.CreatedBy.Roles,
-            CommunityRole = CommunityRole.Creator,
+            Role = community.CreatedBy.Role,
             JoinedAt = community.CreatedAt
         };
+        CommunityMemberRole communityMemberRole = new CommunityMemberRole()
+        {
+            CommunityMemberId = member.Id,
+            Role = CommunityRole.Creator
+        };
+        member.CommunityRole.Add(communityMemberRole);
         await _communityMemberRepository.AddCommunityMember(member);
         
         string subject = "Your Community Has Been Approved 🎉";

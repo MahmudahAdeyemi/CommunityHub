@@ -4,8 +4,9 @@ using ComuunityHub.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComuunityHub.Controllers;
-
-public class CommunityController : ControllerBase
+[ApiController]
+[Route("api/[controller]")]
+public class CommunityController : Controller
 {
     private readonly ICommunityMemberService _communityMemberService;
     private readonly ICommunityService _communityService;

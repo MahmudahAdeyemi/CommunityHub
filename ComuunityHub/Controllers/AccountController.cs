@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ComuunityHub.Controllers;
 [ApiController]
 [Route("api/account")]
-public class AccountController : ControllerBase
+public class AccountController : Controller
 {
     private readonly IUserService  _userService;
     private readonly IEmailOTPService _emailOTPService;

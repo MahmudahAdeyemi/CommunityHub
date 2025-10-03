@@ -23,7 +23,7 @@ public class ElasticService : IElasticService
                 .MultiMatch(m => m
                         .Fields(fields)
                         .Query(keyword)
-                        .Fuzziness(new Elastic.Clients.Elasticsearch.Fuzziness("AUTO"))
+                        .Fuzziness(new Fuzziness("AUTO"))
                 )
             )
         );
